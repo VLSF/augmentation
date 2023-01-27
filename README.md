@@ -7,6 +7,7 @@ Tutorials:
 + [Random coordinate transformations in D=1 and D=2](https://github.com/VLSF/augmentation/blob/main/notebooks/Random%20coordinate%20transformations.ipynb)
 + [Augmentation for D=1 datasets](https://github.com/VLSF/augmentation/blob/main/notebooks/Augmentation%20for%20D%3D1%20equations.ipynb)
 + [Augmentation for D=2 datasets](https://github.com/VLSF/augmentation/blob/main/notebooks/Augmentation%20for%20D%3D2%20equations.ipynb)
++ [Training with and without augmentation](https://github.com/VLSF/augmentation/blob/main/notebooks/Training%20example.ipynb)
 
 Individual links for datasets (convenient to download from Google Colab, [look here for the example](https://github.com/VLSF/augmentation/blob/main/notebooks/Augmentation%20for%20D%3D1%20equations.ipynb)):
 + [Elliptic 1D](https://disk.yandex.ru/d/ys7xC3qfLa4CMg)
