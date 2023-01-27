@@ -31,24 +31,27 @@ def get_coeff(key, N, beta=1e-2, p=1.0):
     coeff = jnp.hstack([1, coeff])
     return coeff
 
-def get_transform(coeff, A):
+def get_transform_(coeff, A):
     return jnp.sum(coeff.reshape(-1, 1)*A, 0)
+
+def get_transform_1d(coeff, A):
+    return jnp.expand_dims(get_transform_(coeff, A), 0)
 
 def get_transform_2d(coeff_list, A_list):
     A_xi, A_eta = A_list
     coeff1, coeff2, coeff3, coeff4 = coeff_list
-    x = jnp.outer(1 - A_eta[0], get_transform(coeff1, A_xi)) + jnp.outer(A_eta[0], get_transform(coeff2, A_xi))
-    y = jnp.outer(get_transform(coeff3, A_eta), 1 - A_xi[0]) + jnp.outer(get_transform(coeff4, A_eta), A_xi[0])
+    x = jnp.outer(1 - A_eta[0], get_transform_(coeff1, A_xi)) + jnp.outer(A_eta[0], get_transform_(coeff2, A_xi))
+    y = jnp.outer(get_transform_(coeff3, A_eta), 1 - A_xi[0]) + jnp.outer(get_transform_(coeff4, A_eta), A_xi[0])
     return jnp.stack([x, y], 0)
 
 def get_first_derivatives(coeff_list, A_list, dA_list):
     A_xi, A_eta = A_list
     dA_xi, dA_eta = dA_list
     coeff1, coeff2, coeff3, coeff4 = coeff_list
-    a = jnp.outer(get_transform(coeff3, dA_eta), 1 - A_xi[0]) + jnp.outer(get_transform(coeff4, dA_eta), A_xi[0])
-    b = jnp.outer(dA_eta[0], get_transform(coeff1, A_xi) - get_transform(coeff2, A_xi))
-    c = jnp.outer(get_transform(coeff3, A_eta) - get_transform(coeff4, A_eta), dA_xi[0])
-    d = jnp.outer(1 - A_eta[0], get_transform(coeff1, dA_xi)) + jnp.outer(A_eta[0], get_transform(coeff2, dA_xi))
+    a = jnp.outer(get_transform_(coeff3, dA_eta), 1 - A_xi[0]) + jnp.outer(get_transform_(coeff4, dA_eta), A_xi[0])
+    b = jnp.outer(dA_eta[0], get_transform_(coeff1, A_xi) - get_transform_(coeff2, A_xi))
+    c = jnp.outer(get_transform_(coeff3, A_eta) - get_transform_(coeff4, A_eta), dA_xi[0])
+    d = jnp.outer(1 - A_eta[0], get_transform_(coeff1, dA_xi)) + jnp.outer(A_eta[0], get_transform_(coeff2, dA_xi))
     J = a*d - b*c
     J_inv = jnp.stack([jnp.stack([a, b], 0), jnp.stack([c, d], 0)], 0) / J.reshape(1, 1, J.shape[0], J.shape[1])
     return J_inv, J
@@ -58,10 +61,10 @@ def get_second_derivatives(coeff_list, A_list, dA_list, d2A_list):
     dA_xi, dA_eta = dA_list
     d2A_xi, d2A_eta = d2A_list
     coeff1, coeff2, coeff3, coeff4 = coeff_list
-    a = jnp.outer(1 - A_eta[0], get_transform(coeff1, d2A_xi)) + jnp.outer(A_eta[0], get_transform(coeff2, d2A_xi))
-    b = jnp.outer(dA_eta[0], get_transform(coeff2, dA_xi) - get_transform(coeff1, dA_xi))
-    c = jnp.outer(get_transform(coeff3, d2A_eta), 1 - A_xi[0]) + jnp.outer(get_transform(coeff4, d2A_eta), A_xi[0])
-    d = jnp.outer(get_transform(coeff4, dA_eta) - get_transform(coeff3, dA_eta), dA_xi[0])
+    a = jnp.outer(1 - A_eta[0], get_transform_(coeff1, d2A_xi)) + jnp.outer(A_eta[0], get_transform_(coeff2, d2A_xi))
+    b = jnp.outer(dA_eta[0], get_transform_(coeff2, dA_xi) - get_transform_(coeff1, dA_xi))
+    c = jnp.outer(get_transform_(coeff3, d2A_eta), 1 - A_xi[0]) + jnp.outer(get_transform_(coeff4, d2A_eta), A_xi[0])
+    d = jnp.outer(get_transform_(coeff4, dA_eta) - get_transform_(coeff3, dA_eta), dA_xi[0])
     x_ = jnp.stack([jnp.stack([a, b], 0), jnp.stack([b, a*0], 0)], 0)
     y_ = jnp.stack([jnp.stack([c*0, d], 0), jnp.stack([d, c], 0)], 0)
     return jnp.stack([x_, y_], 0)
