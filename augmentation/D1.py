@@ -1,5 +1,5 @@
 import jax.numpy as jnp
-from jax import config, random, vmap
+from jax import config, random, vmap, jit
 config.update("jax_enable_x64", True)
 
 from augmentation import coordinate_transforms
@@ -23,6 +23,7 @@ def augment_dataset(features, targets, key, augment_sample, augmentation_factor,
     T = jnp.vstack(T)
     return F, T
 
+@jit
 def eliptic_augment_sample(features, target, key, A, dA, d2A, beta=1e-5, p=1.0):
     M = (A.shape[0] - 1) // 2
     coeff = coordinate_transforms.get_coeff(key, M, beta=beta, p=p)
@@ -33,6 +34,7 @@ def eliptic_augment_sample(features, target, key, A, dA, d2A, beta=1e-5, p=1.0):
     t_ = coordinate_transforms.interpolate(x, target[0])
     return jnp.stack([a_, f_], 0), jnp.expand_dims(t_, 0)
 
+@jit
 def convection_diffusion_augment_sample(features, target, key, A, dA, d2A, beta=1e-5, p=1.0):
     M = (A.shape[0] - 1) // 2
     coeff = coordinate_transforms.get_coeff(key, M, beta=beta, p=p)
@@ -45,6 +47,7 @@ def convection_diffusion_augment_sample(features, target, key, A, dA, d2A, beta=
     t_ = coordinate_transforms.interpolate(x, target[0]) * dx[0]
     return jnp.stack([a_, v_, init_], 0), jnp.expand_dims(t_, 0)
 
+@jit
 def wave_augment_sample(features, target, key, A, dA, d2A, beta=1e-5, p=1.0):
     M = (A.shape[0] - 1) // 2
     coeff = coordinate_transforms.get_coeff(key, M, beta=beta, p=p)
