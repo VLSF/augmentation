@@ -17,7 +17,7 @@ def transform_matrix(a11, a22, a12, J_inv):
     return A_[0, 0], A_[1, 1], A_[0, 1]
 
 @jit
-def elliptic_augmentation_sample(feature, target, key, A_list, dA_list, d2A_list, beta=1e-5, p=1.0):
+def elliptic_augment_sample(feature, target, key, A_list, dA_list, d2A_list, beta=1e-5, p=1.0):
     M = (A_list[0].shape[0] - 1) // 2
     keys = random.split(key, 4)
     coeff_list = [coordinate_transforms.get_coeff(key, M, beta=beta, p=p) for key in keys]
@@ -37,7 +37,7 @@ def elliptic_augmentation_sample(feature, target, key, A_list, dA_list, d2A_list
     return features_, targets_
 
 @jit
-def wave_augmentation_sample(feature, target, key, A_list, dA_list, d2A_list, beta=1e-5, p=1.0):
+def wave_augment_sample(feature, target, key, A_list, dA_list, d2A_list, beta=1e-5, p=1.0):
     M = (A_list[0].shape[0] - 1) // 2
     keys = random.split(key, 4)
     coeff_list = [coordinate_transforms.get_coeff(key, M, beta=beta, p=p) for key in keys]
@@ -63,7 +63,7 @@ def wave_augmentation_sample(feature, target, key, A_list, dA_list, d2A_list, be
     return features_, targets_
 
 @jit
-def convection_diffusion_augmentation_sample(feature, target, key, A_list, dA_list, d2A_list, beta=1e-5, p=1.0):
+def convection_diffusion_augment_sample(feature, target, key, A_list, dA_list, d2A_list, beta=1e-5, p=1.0):
     M = (A_list[0].shape[0] - 1) // 2
     keys = random.split(key, 4)
     coeff_list = [coordinate_transforms.get_coeff(key, M, beta=beta, p=p) for key in keys]
@@ -114,36 +114,36 @@ def augment_dataset(features, targets, key, augment_sample, augmentation_factor,
 
 def elliptic_augmentation_I(features, targets, key, augmentation_factor):
     # relative error >= 1
-    return augment_dataset(features, targets, key, elliptic_augmentation_sample, augmentation_factor, M=1, beta=1e-5, p=1.0)
+    return augment_dataset(features, targets, key, elliptic_augment_sample, augmentation_factor, M=1, beta=1e-5, p=1.0)
 
 def elliptic_augmentation_II(features, targets, key, augmentation_factor):
     # relative error ~ .5
-    return augment_dataset(features, targets, key, elliptic_augmentation_sample, augmentation_factor, M=5, beta=1e-5, p=1.0)
+    return augment_dataset(features, targets, key, elliptic_augment_sample, augmentation_factor, M=5, beta=1e-5, p=1.0)
 
 def elliptic_augmentation_III(features, targets, key, augmentation_factor):
     # relative error < .5
-    return augment_dataset(features, targets, key, elliptic_augmentation_sample, augmentation_factor, M=10, beta=1e-5, p=1.0)
+    return augment_dataset(features, targets, key, elliptic_augment_sample, augmentation_factor, M=10, beta=1e-5, p=1.0)
 
 def convection_diffusion_augmentation_I(features, targets, key, augmentation_factor):
     # relative error: convection ~ 5-10, the rest ~ 1
-    return augment_dataset(features, targets, key, convection_diffusion_augmentation_sample, augmentation_factor, M=1, beta=0.25, p=2.0)
+    return augment_dataset(features, targets, key, convection_diffusion_augment_sample, augmentation_factor, M=1, beta=0.25, p=2.0)
 
 def convection_diffusion_augmentation_II(features, targets, key, augmentation_factor):
     # relative error: convection ~ 1, the rest ~ .1
-    return augment_dataset(features, targets, key, convection_diffusion_augmentation_sample, augmentation_factor, M=5, beta=5, p=2.0)
+    return augment_dataset(features, targets, key, convection_diffusion_augment_sample, augmentation_factor, M=5, beta=5, p=2.0)
 
 def convection_diffusion_augmentation_III(features, targets, key, augmentation_factor):
     # relative error: convection ~ .5, the rest ~ .05
-    return augment_dataset(features, targets, key, convection_diffusion_augmentation_sample, augmentation_factor, M=10, beta=1e-5)
+    return augment_dataset(features, targets, key, convection_diffusion_augment_sample, augmentation_factor, M=10, beta=1e-5)
 
 def wave_augmentation_I(features, targets, key, augmentation_factor):
     # relative error: convection > 1, the rest ~ 1
-    return augment_dataset(features, targets, key, wave_augmentation_sample, augmentation_factor, M=1, beta=0.25, p=2.0)
+    return augment_dataset(features, targets, key, wave_augment_sample, augmentation_factor, M=1, beta=0.25, p=2.0)
 
 def wave_augmentation_II(features, targets, key, augmentation_factor):
     # relative error: convection ~ 1, the rest ~ .1
-    return augment_dataset(features, targets, key, wave_augmentation_sample, augmentation_factor, M=5, beta=5, p=2.0)
+    return augment_dataset(features, targets, key, wave_augment_sample, augmentation_factor, M=5, beta=5, p=2.0)
 
 def wave_augmentation_III(features, targets, key, augmentation_factor):
     # relative error: convection ~ .5, the rest ~ .05
-    return augment_dataset(features, targets, key, wave_augmentation_sample, augmentation_factor, M=10, beta=15, p=2.0)
+    return augment_dataset(features, targets, key, wave_augment_sample, augmentation_factor, M=10, beta=15, p=2.0)
