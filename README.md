@@ -1,6 +1,7 @@
 # General Covariance Data Augmentation for Neural PDE Solvers
 
 Links:
++ [https://arxiv.org/abs/2301.12730](https://arxiv.org/abs/2301.12730)
 + [All datasets](https://disk.yandex.ru/d/ArC6jT3TZcKncw)
 
 Tutorials:
