@@ -9,6 +9,7 @@ Tutorials:
 + [Augmentation for D=1 datasets](https://github.com/VLSF/augmentation/blob/main/notebooks/Augmentation%20for%20D%3D1%20equations.ipynb)
 + [Augmentation for D=2 datasets](https://github.com/VLSF/augmentation/blob/main/notebooks/Augmentation%20for%20D%3D2%20equations.ipynb)
 + [Training with and without augmentation](https://github.com/VLSF/augmentation/blob/main/notebooks/Training%20example.ipynb)
++ [Lid-driven cavity flow](https://github.com/VLSF/augmentation/blob/main/notebooks/Lid-driven%20cavity%20flow.ipynb)
 
 Individual links for datasets (convenient to download from Google Colab, [look here for the example](https://github.com/VLSF/augmentation/blob/main/notebooks/Augmentation%20for%20D%3D1%20equations.ipynb)):
 + [Elliptic 1D](https://disk.yandex.ru/d/ys7xC3qfLa4CMg)
@@ -23,3 +24,4 @@ Individual links for datasets (convenient to download from Google Colab, [look h
 + [Elliptic beta 2D hard](https://disk.yandex.ru/d/m_F6AL7r-Myw5A)
 + [Convection-diffusion 2D hard](https://disk.yandex.ru/d/XN6X0Dc8Y5-3oA)
 + [Wave 2D hard](https://disk.yandex.ru/d/55RzaoLqlMnaTQ)
++ []()
